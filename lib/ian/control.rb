@@ -50,7 +50,10 @@ module Ian
         lines << "#{fields[key]}: #{@fields[key]}"
       end
       
-      lines << "Depends: #{@fields[:depends].join(", ")}" if @fields[:depends].any?
+      if @fields[:depends] and @fields[:depends].any?
+        lines << "Depends: #{@fields[:depends].join(", ")}"
+      end
+      
       lines << "Description: #{@fields[:description]}"
       
       lines += @fields[:long_description].map do |ld|
