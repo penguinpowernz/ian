@@ -5,7 +5,7 @@ require 'logger'
 require 'ian'
 
 IAN_DIR = Dir.pwd
-
+puts "IAN DIR IS #{IAN_DIR}"
 def initialized?
   File.directory?("#{IAN_DIR}/DEBIAN") and
   File.exist?("#{IAN_DIR}/DEBIAN/control")
