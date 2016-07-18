@@ -27,7 +27,7 @@ Slop.parse help: true do
         abort "Directory '#{name}' exists"
       end
       
-      Ian.new(name)
+      Ian.create(name)
     end
   end
 

@@ -18,14 +18,18 @@ module Ian
     
     def create(name)
       FileUtils.mkdir(name)
+      FileUtils.mkdir(debpath(name))
+
       init(name)
     end
 
     def init(path)
       Ian::Control.new(ctrlpath(path)).save
     
-      File.write("#{path}/postinst", "#!/bin/bash\n\n\nexit 0;")
-      FileUtils.chmod(0755, "#{path}/postinst")   
+      pi = "#{debpath(path)}/postinst"
+    
+      File.write(pi, "#!/bin/bash\n\n\nexit 0;")
+      FileUtils.chmod(0755, Dir["#{debpath(path)}/*"])
     end
     
     def control(path)

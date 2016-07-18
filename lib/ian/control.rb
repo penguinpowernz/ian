@@ -50,7 +50,7 @@ module Ian
         lines << "#{fields[key]}: #{@fields[key]}"
       end
       
-      lines << "Depends: #{@fields[:depends].join(", ")}" if @fields[:depends]
+      lines << "Depends: #{@fields[:depends].join(", ")}" if @fields[:depends].any?
       lines << "Description: #{@fields[:description]}"
       
       lines += @fields[:long_description].map do |ld|
@@ -60,11 +60,17 @@ module Ian
       lines.join("\n")
     end
 
+    def save
+      File.write(@path, to_s)
+    end
+
     # TODO: move this out of here
     def guess_maintainer
       text = File.read("#{ENV['HOME']}/.gitconfig")
       name = text.match(/name = (.*)$/)[1]
       email = text.match(/email = (.*)$/)[1]
+      
+      "#{name} <#{email}>"
     rescue
       return ""
     end
