@@ -28,6 +28,8 @@ module Ian
     def parse
       text = File.read(@path)
       
+      @fields = {}
+      
       fields.each do |f, name|
         m = text.match(/^#{name}: (.*)$/)
         next unless m
@@ -38,14 +40,17 @@ module Ian
         @fields[:depends] = @fields[:depends].split(",").map! {|d| d.strip }
       end
       
-      @feilds[:long_description] = text.scan(/^  (.*)$/)
+      @fields[:long_description] = text.scan(/^  (.*)$/).flatten
     end
   
     def to_s
       lines = []
-      lines << "Package: #{@fields[:package]}"
-      lines << "Version: #{@fields[:version]}"
-      lines << "Depends: #{@fields[:depends]}" if @fields[:dependencies]
+      
+      [:package, :version, :section, :priority, :arch, :essential, :size, :maintainer, :homepage].each do |key|
+        lines << "#{fields[key]}: #{@fields[key]}"
+      end
+      
+      lines << "Depends: #{@fields[:depends].join(", ")}" if @fields[:depends]
       lines << "Description: #{@fields[:description]}"
       
       lines += @fields[:long_description].map do |ld|
@@ -55,15 +60,29 @@ module Ian
       lines.join("\n")
     end
 
-    private
+    # TODO: move this out of here
+    def guess_maintainer
+      text = File.read("#{ENV['HOME']}/.gitconfig")
+      name = text.match(/name = (.*)$/)[1]
+      email = text.match(/email = (.*)$/)[1]
+    rescue
+      return ""
+    end
 
     def defaults
       {
-        :package => "name",
-        :version => "0.0.1",
-        :dependencies => [],
-        :description => "This is a description",
-        :long_description => [
+        package:          "name",
+        priority:         "optional",
+        section:          "misc",
+        essential:        "no",
+        size:             0,
+        maintainer:       guess_maintainer,
+        homepage:         "http://example.com",
+        arch:             "all",
+        version:          "0.0.1",
+        depends:          [],
+        description:      "This is a description",
+        long_description: [
           "This is a longer description that can take",
           "up multiple lines"
         ]
@@ -72,9 +91,16 @@ module Ian
 
     def fields
       {
-        package: "Package",
-        depends: "Depends",
-        version: "Version",
+        package:     "Package",
+        depends:     "Depends",
+        version:     "Version",
+        priority:    "Priority",
+        section:     "Section",
+        essential:   "Essential",
+        size:        "Installed-Size",
+        maintainer:  "Maintainer",
+        homepage:    "Homepage",
+        arch:        "Architecture",
         description: "Description"
       }
     end
