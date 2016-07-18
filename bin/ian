@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+
+require 'slop'
+require 'logger'
+require 'ian'
+
+IAN_DIR = Dir.pwd
+
+def initialized?
+  File.directory?("#{IAN_DIR}/DEBIAN") and
+  File.exist?("#{IAN_DIR}/DEBIAN/control")
+end
+
+Slop.parse help: true do
+
+  command :new do
+    description "Create a new Debian package from scratch"
+    
+    run do |opts, args|
+      name = args.first
+      
+      if name.nil?
+        abort "Must provide name as the first argument"
+      end
+      
+      if File.directory?(name)
+        abort "Directory '#{name}' exists"
+      end
+      
+      Ian.new(name)
+    end
+  end
+
+
+  command :init do
+    description "Initialize the current folder as a Debian package"
+  
+    run do |opts, args|
+      abort "Already initialized." if initialized?
+      Ian.init(IAN_DIR)
+    end
+  end
+
+  command :pkg do
+    description "Build a Debian package"
+  
+    run do |opts, args|
+      Ian.build_package(IAN_DIR)
+    end
+  end
+
+  command :ctrl do
+    description "Modify the Debian control file"
+  
+    on :v, :version=, "Change the version"
+    
+    run do |opts, args|
+    end 
+  end
+  
+  command :info do
+    description "Print information for this package"
+
+    run do |opts, args|
+      puts Ian.control(IAN_DIR)
+    end 
+  end
+  
+  command :deps do
+    description "Print dependencies for this package"
+
+    run do |opts, args|
+      ctrl = Ian.control(IAN_DIR)
+      ctrl.deps.each do |dep|
+        puts dep
+      end
+    end
+  end
+
+end
