@@ -49,12 +49,17 @@ Slop.parse help: true do
     end
   end
 
-  command :ctrl do
+  command :set do
     description "Modify the Debian control file"
   
-    on :v, :version=, "Change the version"
+    on :v, :version=,   "Change the version"
+    on :a, :arch=,      "Change the architecture"
     
     run do |opts, args|
+      c = Ian.control(IAN_DIR)
+      c.update(opts.to_hash)
+      c.save
+      puts "Updated control file"
     end 
   end
   
