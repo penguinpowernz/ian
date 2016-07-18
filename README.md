@@ -1,8 +1,13 @@
 # Ian
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ian`. To experiment with that code, run `bin/console` for an interactive prompt.
+A Debian CLI package hacking tool named in memory of the late Ian Murdock.
 
-TODO: Delete this and the text above, and describe your gem
+This tool will help you to create and maintain the source repos for Debain 
+packages and tries to mimic the CLI of other popular tools such as git and
+bundler.
+
+It is intended to be helpful when integrating other build tools/systems and
+with CI/CD.
 
 ## Installation
 
@@ -22,7 +27,33 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Create a new package (like `bundle new gemname`):
+
+    $ ian new mycoolpackage
+
+Init an existing directory (like `git init`):
+
+    $ ian init
+
+Show the info for the package (basically `cat DEBAIN/control`):
+
+    $ ian info
+    
+Set info in the control file:
+
+    $ ian set -v 2.3.1-beta
+    $ ian set -a amd64
+
+Build a package:
+
+    $ ian pkg
+
+Before building a package ian will determine the installed size, leave out any
+cruft (such as the `.git` directory) and move READMEs and the like to `/usr/share/doc`.
+
+## TODO
+
+- [ ] MD5sums generation
 
 ## Development
 
@@ -32,5 +63,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/ian.
+Bug reports and pull requests are welcome on GitHub at https://github.com/penguinpowernz/ian.
 
+## In Memory Of
+
+In memory of Ian Ashley Murdock (1973 - 2015) founder of the Debian project.
