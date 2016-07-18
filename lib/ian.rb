@@ -18,12 +18,13 @@ module Ian
     
     def create(name)
       FileUtils.mkdir(name)
-      FileUtils.mkdir(debpath(name))
 
       init(name)
     end
 
     def init(path)
+      FileUtils.mkdir(debpath(path))
+
       Ian::Control.new(ctrlpath(path)).save
     
       pi = "#{debpath(path)}/postinst"
