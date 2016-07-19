@@ -15,6 +15,11 @@ log = Logger.new(STDOUT)
 
 Slop.parse help: true do
 
+  on :v, "Print the version" do
+    puts Ian::VERSION
+    exit
+  end
+
   command :new do
     description "Create a new Debian package from scratch"
 
