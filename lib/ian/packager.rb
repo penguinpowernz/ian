@@ -96,6 +96,8 @@ module Ian
       files = %w[.git .gitignore .ianignore]
       
       File.read(File.join(@path, ".ianignore")).lines.each do |ign|
+        next if ign.start_with? "#"
+        
         ign.chomp!
         igns = Dir["#{@path}/#{ign}"]
         next if igns.empty?
