@@ -43,7 +43,7 @@ module Ian
       #File.write("#{path}/ian.yml", cfg.to_yaml)
       #log.info "Generated ian.yml"
 
-      File.write("#{path}/.ianignore", "*.deb\n")
+      File.write("#{path}/.ianignore", "pkg\n")
       log.info "Generated .ianignore"
     end
 

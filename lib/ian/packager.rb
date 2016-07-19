@@ -59,10 +59,13 @@ module Ian
 
     # build the package out of the temp dir
     def build
+      pkgdir = File.join(@path, "pkg")
+      FileUtils.mkdir_p pkgdir
+    
       FileUtils.chmod(0755, Dir["#{Ian.debpath(@dir)}/*"])
       FileUtils.chmod(0755, Ian.debpath(@dir))
 
-      pkg    = File.join(@path, "#{pkgname}.deb")
+      pkg    = File.join(pkgdir, "#{pkgname}.deb")
       output = %x[dpkg-deb -b #{@dir} #{pkg}]
 
       return [$?.success?, pkg, output]
