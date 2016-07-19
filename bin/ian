@@ -39,7 +39,7 @@ Slop.parse help: true do
 
     run do |opts, args|
       abort "Already initialized." if initialized?
-      Ian.init(IAN_DIR)
+      Ian.init(IAN_DIR, log)
     end
   end
 

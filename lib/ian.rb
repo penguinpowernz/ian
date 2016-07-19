@@ -24,17 +24,27 @@ module Ian
       init(name)
     end
 
-    def init(path)
+    def init(path, log)
       FileUtils.mkdir(debpath(path))
 
       control(path).save
+      log.info "Generated #{path}"
 
       pi = "#{debpath(path)}/postinst"
 
       File.write(pi, "#!/bin/bash\n\n\nexit 0;")
+      log.info "Generated #{pi}"
 
       FileUtils.chmod(0755, Dir["#{debpath(path)}/*"])
       FileUtils.chmod(0755, debpath(path))
+
+      #cfg = {}
+
+      #File.write("#{path}/ian.yml", cfg.to_yaml)
+      #log.info "Generated ian.yml"
+
+      File.write("#{path}/.ianignore", "*.deb\n")
+      log.info "Generated .ianignore"
     end
 
     def control(path)
