@@ -55,6 +55,7 @@ cruft (such as the `.git` directory) and move READMEs and the like to `/usr/shar
 
 - [ ] MD5sums generation
 - [x] finish package generation code
+- [ ] ADD SPECS!!!!
 
 ## Development
 
