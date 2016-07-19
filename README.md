@@ -2,7 +2,7 @@
 
 A Debian CLI package hacking tool named in memory of the late Ian Murdock.
 
-This tool will help you to create and maintain the source repos for Debain 
+This tool will help you to create and maintain the source repos for Debain
 packages and tries to mimic the CLI of other popular tools such as git and
 bundler.
 
@@ -38,7 +38,7 @@ Init an existing directory (like `git init`):
 Show the info for the package (basically `cat DEBAIN/control`):
 
     $ ian info
-    
+
 Set info in the control file:
 
     $ ian set -v 2.3.1-beta
@@ -54,7 +54,7 @@ cruft (such as the `.git` directory) and move READMEs and the like to `/usr/shar
 ## TODO
 
 - [ ] MD5sums generation
-- [ ] finish package generation code
+- [x] finish package generation code
 
 ## Development
 

@@ -47,7 +47,8 @@ Slop.parse help: true do
     description "Build a Debian package"
 
     run do |opts, args|
-      Ian.build_package(IAN_DIR, log)
+      pkg = Ian.build_package(IAN_DIR, log)
+      log.info "Package built to #{pkg}"
     end
   end
 

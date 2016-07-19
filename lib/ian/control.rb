@@ -1,44 +1,44 @@
 module Ian
   class Control
     attr_reader :path
-  
+
     def initialize(path)
       @path = path
-      
+
       if File.exist?(@path)
         parse
       else
         @fields = defaults
       end
     end
-  
+
     # allow setting fields directly
     def []=(field, value)
       raise ArgumentError, "Invalid field: #{field}" unless defaults.keys.include?(field)
       @fields[field] = value
     end
-    
+
     # allow reading fields directly
     def [](field)
       @fields[field]
     end
 
-    # parse this control file into the fields hash  
+    # parse this control file into the fields hash
     def parse
       text = File.read(@path)
-      
+
       @fields = {}
-      
+
       fields.each do |f, name|
         m = text.match(/^#{name}: (.*)$/)
         next unless m
         @fields[f] = m[1]
       end
-      
+
       if @fields[:depends]
         @fields[:depends] = @fields[:depends].split(",").map! {|d| d.strip }
       end
-      
+
       @fields[:long_desc] = text.scan(/^  (.*)$/).flatten
     end
 
@@ -50,25 +50,26 @@ module Ian
         end
       end
     end
-  
+
     # output the control file as a string
     def to_s
       lines = []
-      
+
       [:package, :version, :section, :priority, :arch, :essential, :size, :maintainer, :homepage].each do |key|
         lines << "#{fields[key]}: #{@fields[key]}"
       end
-      
+
       if @fields[:depends] and @fields[:depends].any?
         lines << "Depends: #{@fields[:depends].join(", ")}"
       end
-      
+
       lines << "Description: #{@fields[:desc]}"
-      
+
       lines += @fields[:long_desc].map do |ld|
         "  #{ld}"
       end
-      
+
+      lines << "" # blank line as per debian control spec
       lines.join("\n")
     end
 
@@ -82,7 +83,7 @@ module Ian
       text = File.read("#{ENV['HOME']}/.gitconfig")
       name = text.match(/name = (.*)$/)[1]
       email = text.match(/email = (.*)$/)[1]
-      
+
       "#{name} <#{email}>"
     rescue
       return ""

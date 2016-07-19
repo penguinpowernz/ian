@@ -1,4 +1,5 @@
 require 'tmpdir'
+require 'fileutils'
 
 module Ian
   class Packager
@@ -10,21 +11,24 @@ module Ian
 
     # run the packager
     def run
-      @dir = Dir.tmpdir
+      @dir = Dir.mktmpdir
 
-      if copy_contents
+      success = copy_contents
+
+      if success
         @log.info("Copied files for packaging to #{@dir}")
       else
         raise StandardError, "Failed to copy files for packaging"
       end
 
       move_root_files
-      success, output = *build
+      success, pkg, output = *build
 
-      if !success
-        @log.error "Failed to build package"
-        @log.error output
-      end
+      raise RuntimeError, "Failed to build package: #{output}" unless success
+
+      pkg
+    ensure
+      FileUtils.rm_rf @dir if File.exist? @dir
     end
 
     # copy the contents to a tmp dir
@@ -40,7 +44,8 @@ module Ian
     # move extraneous stuff like README and CHANGELOG to /usr/share/doc
     def move_root_files
       docs  = "#{@dir}/usr/share/docs/#{pkgname}"
-      files = %x[find #{@dir} -type f].lines.map {|l| l.chomp}
+      files = %x[find #{@dir} -type f -maxdepth 1].lines.map {|l| l.chomp}
+      raise RuntimeError, "Unable to copy root files" unless $?.success?
 
       FileUtils.mkdir_p(docs)
 
@@ -54,10 +59,13 @@ module Ian
 
     # build the package out of the temp dir
     def build
+      FileUtils.chmod(0755, Dir["#{Ian.debpath(@dir)}/*"])
+      FileUtils.chmod(0755, Ian.debpath(@dir))
+
       pkg    = File.join(@path, "#{pkgname}.deb")
       output = %x[dpkg-deb -b #{@dir} #{pkg}]
 
-      return [$?.success?, output]
+      return [$?.success?, pkg, output]
     end
 
     private

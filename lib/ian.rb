@@ -34,6 +34,7 @@ module Ian
       File.write(pi, "#!/bin/bash\n\n\nexit 0;")
 
       FileUtils.chmod(0755, Dir["#{debpath(path)}/*"])
+      FileUtils.chmod(0755, debpath(path))
     end
 
     def control(path)
