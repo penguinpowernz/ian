@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Ian by penguinpowernz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Ian</h1>
+      <h2 class="project-tagline">A Debian CLI package hacking tool named in memory of the late Ian Murdock.</h2>
+      <a href="https://github.com/penguinpowernz/ian" class="btn">View on GitHub</a>
+      <a href="https://github.com/penguinpowernz/ian/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/penguinpowernz/ian/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="ian" class="anchor" href="#ian" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ian</h1>
+
+<p>A Debian CLI package hacking tool named in memory of the late Ian Murdock.</p>
+
+<p>This tool will help you to create and maintain the source repos for Debain
+packages and tries to mimic the CLI of other popular tools such as git and
+bundler.</p>
+
+<p>It is intended to be helpful when integrating other build tools/systems and
+with CI/CD.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Add this line to your application's Gemfile:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-k">gem</span> <span class="pl-s"><span class="pl-pds">'</span>ian<span class="pl-pds">'</span></span></pre></div>
+
+<p>And then execute:</p>
+
+<pre><code>$ bundle
+</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre><code>$ gem install ian
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Create a new package (like <code>bundle new gemname</code>):</p>
+
+<pre><code>$ ian new mycoolpackage
+</code></pre>
+
+<p>Init an existing directory (like <code>git init</code>):</p>
+
+<pre><code>$ ian init
+</code></pre>
+
+<p>Show the info for the package (basically <code>cat DEBAIN/control</code>):</p>
+
+<pre><code>$ ian info
+</code></pre>
+
+<p>Set info in the control file:</p>
+
+<pre><code>$ ian set -v 2.3.1-beta
+$ ian set -a amd64
+</code></pre>
+
+<p>Build a package:</p>
+
+<pre><code>$ ian pkg
+</code></pre>
+
+<p>Before building a package ian will determine the installed size, leave out any
+cruft (such as the <code>.git</code> directory) and move READMEs and the like to <code>/usr/share/doc</code>.</p>
+
+<h2>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h2>
+
+<ul>
+<li>[ ] MD5sums generation</li>
+<li>[x] finish package generation code</li>
+<li>[ ] ADD SPECS!!!!</li>
+<li>[ ] Nicer output</li>
+</ul>
+
+<h2>
+<a id="development" class="anchor" href="#development" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Development</h2>
+
+<p>After checking out the repo, run <code>bin/setup</code> to install dependencies. Then, run <code>rake spec</code> to run the tests. You can also run <code>bin/console</code> for an interactive prompt that will allow you to experiment.</p>
+
+<p>To install this gem onto your local machine, run <code>bundle exec rake install</code>. To release a new version, update the version number in <code>version.rb</code>, and then run <code>bundle exec rake release</code>, which will create a git tag for the version, push git commits and tags, and push the <code>.gem</code> file to <a href="https://rubygems.org">rubygems.org</a>.</p>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>Bug reports and pull requests are welcome on GitHub at <a href="https://github.com/penguinpowernz/ian">https://github.com/penguinpowernz/ian</a>.</p>
+
+<h2>
+<a id="in-memory-of" class="anchor" href="#in-memory-of" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>In Memory Of</h2>
+
+<p>In memory of Ian Ashley Murdock (1973 - 2015) founder of the Debian project.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/penguinpowernz/ian">Ian</a> is maintained by <a href="https://github.com/penguinpowernz">penguinpowernz</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
