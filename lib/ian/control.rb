@@ -1,3 +1,5 @@
+require 'ian/utils'
+
 module Ian
   class Control
     attr_reader :path
@@ -82,17 +84,6 @@ module Ian
       File.write(@path, to_s)
     end
 
-    # TODO: move this out of here
-    def guess_maintainer
-      text = File.read("#{ENV['HOME']}/.gitconfig")
-      name = text.match(/name = (.*)$/)[1]
-      email = text.match(/email = (.*)$/)[1]
-
-      "#{name} <#{email}>"
-    rescue
-      return ""
-    end
-
     # default values for a new control file
     def defaults
       {
@@ -101,7 +92,7 @@ module Ian
         section:          "misc",
         essential:        "no",
         size:             0,
-        maintainer:       guess_maintainer,
+        maintainer:       Utils.guess_maintainer,   # TODO: pass the maintainer in somehow
         homepage:         "http://example.com",
         arch:             "all",
         version:          "0.0.1",

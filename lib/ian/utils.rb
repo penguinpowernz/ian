@@ -6,5 +6,16 @@ module Ian
       %x[du #{path} -ks --exclude=".git"].split.first
     end
 
+    # try to guess the maintainer by reading the git config file
+    def guess_maintainer
+      text = File.read(File.join(ENV['HOME'], ".gitconfig"))
+      name = text.match(/name = (.*)$/)[1]
+      email = text.match(/email = (.*)$/)[1]
+
+      "#{name} <#{email}>"
+    rescue Errno::ENOENT
+      return ""
+    end
+
   end
 end
