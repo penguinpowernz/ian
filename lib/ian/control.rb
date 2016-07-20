@@ -25,6 +25,13 @@ module Ian
       @fields[field]
     end
 
+    def delete(field)
+      field.to_sym if field.is_a? String
+      valid_field!(field)
+      raise ArgumentError, "Cannot remove mandatory field #{field.to_s}" if mandatory_fields.include?(field)
+      @fields.delete(field)
+    end
+
     # parse this control file into the fields hash
     def parse
       text = File.read(@path)
