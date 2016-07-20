@@ -140,6 +140,11 @@ module Ian
       [:replaces :conflicts :recommends :suggests :enhances :predepends :depends, :breaks]
     end
 
+
+    # an array of mandatory fields for a control file
+    def mandatory_fields
+      [:package, :version, :architecture, :maintainer, :desc, :long_desc]
+    end
     def valid_field?(key)
       fields.include? key
     end
