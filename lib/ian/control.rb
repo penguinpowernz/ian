@@ -140,5 +140,12 @@ module Ian
       [:replaces :conflicts :recommends :suggests :enhances :predepends :depends, :breaks]
     end
 
+    def valid_field?(key)
+      fields.include? key
+    end
+
+    def valid_field!(key)
+      raise ArgumentError, "Invalid field: #{key}" unless valid_field?(key)
+    end
   end
 end
