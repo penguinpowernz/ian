@@ -1,19 +1,30 @@
 require 'ian/utils'
 
+# TODO: make someone else read/write the file
 module Ian
   class ValidationError < StandardError; end
 
   class Control
     attr_reader :path
 
+    # TODO: make load_file and parse class methods
+    # and pass a hash to initialize
+    #def self.load_file(path)
+    #  self.new(File.read(path))
+    #end
+
     def initialize(path)
       @path = path
 
-      if File.exist?(@path)
+      if exist?
         parse
       else
         @fields = defaults
       end
+    end
+
+    def exist?
+      File.exist?(@path)
     end
 
     # allow setting fields directly
@@ -57,9 +68,9 @@ module Ian
 
     # update a bunch of fields at a time
     def update(hash)
-      hash.each do |key, val|
+      hash.each do |key, value|
         valid_field!(key)
-        raise ArgumentError, "Value for #{key} was empty" if v.nil? or v == ""
+        raise ArgumentError, "Value for #{key} was empty" if value.nil? or value == ""
 
         if relationship_fields.include?(key)
           @fields[key] = value.split(",").map {|d| d.strip }
@@ -155,24 +166,24 @@ module Ian
     end
 
     def relationship_fields
-      [:replaces :conflicts :recommends :suggests :enhances :predepends :depends, :breaks]
+      [:replaces, :conflicts, :recommends, :suggests, :enhances, :predepends, :depends, :breaks]
     end
 
     # return the mandatory fields that are missing from the control file
     def missing_mandatory_fields
       mandatory_fields.map do |f|
         return f unless @fields.keys.include?(f)
-      end
+      end.reject {|f| f.nil? }
     end
 
     # an array of mandatory fields for a control file
     def mandatory_fields
-      [:package, :version, :architecture, :maintainer, :desc, :long_desc]
+      [:package, :version, :arch, :maintainer, :desc, :long_desc]
     end
 
     # checks if the control file is valid
     def valid?
-      missing_mandatory_fields.any?
+      missing_mandatory_fields.empty?
     end
 
     def valid!
