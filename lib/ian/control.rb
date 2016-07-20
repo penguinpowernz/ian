@@ -73,6 +73,7 @@ module Ian
     def to_s
       lines = []
 
+      # build the standard fields
       [:package, :version, :section, :priority, :arch, :essential, :size, :maintainer, :homepage].each do |key|
         lines << "#{fields[key]}: #{@fields[key]}"
       end
@@ -85,6 +86,7 @@ module Ian
 
       lines << "Description: #{@fields[:desc]}"
 
+      # build the long description with the double space at the start for each line
       lines += @fields[:long_desc].map do |ld|
         "  #{ld}"
       end
