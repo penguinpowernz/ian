@@ -89,6 +89,7 @@ module Ian
       return ""
     end
 
+    # default values for a new control file
     def defaults
       {
         package:          "name",
@@ -100,6 +101,13 @@ module Ian
         homepage:         "http://example.com",
         arch:             "all",
         version:          "0.0.1",
+        replaces:         [],
+        conflicts:        [],
+        breaks:           [],
+        recommends:       [],
+        suggests:         [],
+        enhances:         [],
+        predepends:       [],
         depends:          [],
         desc:            "This is a description",
         long_desc:       [
@@ -109,10 +117,18 @@ module Ian
       }
     end
 
+    # a map of field symbols to field names
     def fields
       {
         package:     "Package",
         depends:     "Depends",
+        replaces:    "Replaces",
+        breaks:      "Breaks",
+        conflicts:   "Conflicts",
+        recommends:  "Recommends",
+        suggests:    "Suggests",
+        enhances:    "Enhances",
+        predepends:  "Pre-Depends",
         version:     "Version",
         priority:    "Priority",
         section:     "Section",
