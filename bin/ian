@@ -11,12 +11,17 @@ def initialized?
   File.exist?("#{IAN_DIR}/DEBIAN/control")
 end
 
+def check_initialized!
+  abort "ERROR: Not initialized" unless initialized?
+end
+
 log = Logger.new(STDOUT)
 
 Slop.parse help: true do
 
   on :v, "Print the version" do
-    puts Ian::VERSION
+    puts "Version %s" % [Ian::VERSION]
+    puts "In memory of Ian Ashley Murdock (1973 - 2015)"
     exit
   end
 
@@ -52,6 +57,8 @@ Slop.parse help: true do
     description "Build a Debian package"
 
     run do |opts, args|
+      check_initialized!
+
       pkg = Ian.build_package(IAN_DIR, log)
       log.info "Package built to #{pkg}"
     end
@@ -64,6 +71,8 @@ Slop.parse help: true do
     on :a, :arch=,      "Change the architecture"
 
     run do |opts, args|
+      check_initialized!
+      
       c = Ian.control(IAN_DIR)
       c.update(opts.to_hash)
       c.save
@@ -75,6 +84,8 @@ Slop.parse help: true do
     description "Print information for this package"
 
     run do |opts, args|
+      check_initialized!
+
       c = Ian.control(IAN_DIR)
       puts c
 
@@ -88,7 +99,9 @@ Slop.parse help: true do
   command :deps do
     description "Print dependencies for this package"
 
-    run do |opts, args|
+    run do |opts, args| 
+      check_initialized!
+
       ctrl = Ian.control(IAN_DIR)
       ctrl[:depends].each do |dep|
         puts dep
@@ -100,6 +113,8 @@ Slop.parse help: true do
     description "Show all the known versions"
 
     run do |opts, args|
+      check_initialized!
+
       %x[git tag].scan(/^v.*$/).each do |v|
         puts v
       end
@@ -111,6 +126,8 @@ Slop.parse help: true do
     banner "Usage: ian release [version]\n\nBy omitting the version, the one in the control file will be used\n"
 
     run do |opts, args|
+      check_initialized!
+
       ctrl = Ian.control(IAN_DIR)
       version = ctrl[:version]
 
