@@ -5,7 +5,7 @@ describe Ian do
     expect(Ian::VERSION).not_to be nil
   end
 
-  it 'does something useful' do
-    expect(false).to eq(true)
+  it 'give the location of the DEBIAN path' do
+    expect(File.basename(Ian.debpath("/tmp"))).to eq("DEBIAN")
   end
 end
