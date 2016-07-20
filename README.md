@@ -2,8 +2,8 @@
 
 A Debian CLI package hacking tool named in memory of the late Ian Murdock.
 
-This tool will help you to create and maintain the source repos for Debain
-packages and tries to mimic the CLI of other popular tools such as git and
+This tool will help you to create and maintain git repositories that contain simple
+Debian packages and tries to mimic the CLI of other popular tools such as git and
 bundler.
 
 It is intended to be helpful when integrating other build tools/systems and
