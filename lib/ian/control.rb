@@ -55,11 +55,16 @@ module Ian
       @fields[:long_desc] = text.scan(/^  (.*)$/).flatten
     end
 
-    # update a bunch of fields
+    # update a bunch of fields at a time
     def update(hash)
-      hash.each do |k, v|
-        if fields.keys.include?(k) and v
-          @fields[k] = v
+      hash.each do |key, val|
+        valid_field!(key)
+        raise ArgumentError, "Value for #{key} was empty" if v.nil? or v == ""
+
+        if relationship_fields.include?(key)
+          @fields[key] = value.split(",").map {|d| d.strip }
+        else
+          @fields[key] = value
         end
       end
     end
