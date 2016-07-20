@@ -1,6 +1,8 @@
 require 'ian/utils'
 
 module Ian
+  class ValidationError < StandardError; end
+
   class Control
     attr_reader :path
 
@@ -87,7 +89,9 @@ module Ian
     end
 
     # save the control file to disk
+    # raises Ian::ValidationError
     def save
+      valid!
       File.write(@path, to_s)
     end
 
@@ -147,11 +151,27 @@ module Ian
       [:replaces :conflicts :recommends :suggests :enhances :predepends :depends, :breaks]
     end
 
+    # return the mandatory fields that are missing from the control file
+    def missing_mandatory_fields
+      mandatory_fields.map do |f|
+        return f unless @fields.keys.include?(f)
+      end
+    end
 
     # an array of mandatory fields for a control file
     def mandatory_fields
       [:package, :version, :architecture, :maintainer, :desc, :long_desc]
     end
+
+    # checks if the control file is valid
+    def valid?
+      missing_mandatory_fields.any?
+    end
+
+    def valid!
+      raise ValidationError, "Missing mandatory control fields: #{missing_mandatory_fields.join(",")}" unless valid?
+    end
+
     def valid_field?(key)
       fields.include? key
     end
