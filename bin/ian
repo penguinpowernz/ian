@@ -96,4 +96,44 @@ Slop.parse help: true do
     end
   end
 
+  command :versions do
+    description "Show all the known versions"
+
+    run do |opts, args|
+      %x[git tag].scan(/^v.*$/).each do |v|
+        puts v
+      end
+    end
+  end
+
+  command :release do
+    description "Release the current or new version"
+    banner "Usage: ian release [version]\n\nBy omitting the version, the one in the control file will be used\n"
+
+    run do |opts, args|
+      ctrl = Ian.control(IAN_DIR)
+      version = ctrl[:version]
+
+      if args.any?
+        version = args.first
+        version.gsub!(/^v/, '')
+        log.info "Releasing v#{version}"
+        log.info "Updating control file"
+        ctrl[:version] = version
+        ctrl.save
+
+        log.info "Committing control file"
+        system "git add #{ctrl.path}"
+        system "git commit -m 'releasing v#{version}'"
+
+      end
+
+      log.info "Tagging v#{version}"
+      system "git tag v#{version}"
+
+      pkg = Ian.build_package(IAN_DIR, log)
+      log.info "Package built to #{pkg}"
+    end
+  end
+
 end
