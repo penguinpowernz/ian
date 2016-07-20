@@ -35,8 +35,10 @@ module Ian
         @fields[f] = m[1]
       end
 
-      if @fields[:depends]
-        @fields[:depends] = @fields[:depends].split(",").map! {|d| d.strip }
+      # for the relations fields, split the string out into an array
+      relationship_fields.each do |key|
+        next unless @fields[key]
+        @fields[key] = @fields[key].split(",").map! {|d| d.strip }
       end
 
       @fields[:long_desc] = text.scan(/^  (.*)$/).flatten
@@ -59,8 +61,10 @@ module Ian
         lines << "#{fields[key]}: #{@fields[key]}"
       end
 
-      if @fields[:depends] and @fields[:depends].any?
-        lines << "Depends: #{@fields[:depends].join(", ")}"
+      # build the relationship fields that have been exploded into an array
+      relationship_fields.each do |key|
+        next unless @fields[key] and @fields[key].any?
+        lines << "%s: %s" % [ fields[key], @fields[key].join(", ") ]
       end
 
       lines << "Description: #{@fields[:desc]}"
@@ -139,6 +143,10 @@ module Ian
         arch:        "Architecture",
         desc:        "Description"
       }
+    end
+
+    def relationship_fields
+      [:replaces :conflicts :recommends :suggests :enhances :predepends :depends, :breaks]
     end
 
   end
