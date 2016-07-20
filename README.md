@@ -57,6 +57,8 @@ cruft (such as the `.git` directory) and move READMEs and the like to `/usr/shar
 - [x] finish package generation code
 - [ ] ADD SPECS!!!!
 - [ ] Nicer output
+- [ ] add git tags when version changes
+- [ ] allow packaging past versions from git tags
 
 ## Development
 
