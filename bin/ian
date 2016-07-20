@@ -75,7 +75,13 @@ Slop.parse help: true do
     description "Print information for this package"
 
     run do |opts, args|
-      puts Ian.control(IAN_DIR)
+      c = Ian.control(IAN_DIR)
+      puts c
+
+      unless c.valid?
+        puts "\n"
+        log.warn "Control file is not valid, missing mandatory fields: %s" % c.missing_mandatory_fields
+      end
     end
   end
 
