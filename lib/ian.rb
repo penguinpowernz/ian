@@ -18,25 +18,34 @@ module Ian
       "#{debpath(path)}/control"
     end
 
-    def create(name)
-      FileUtils.mkdir(name)
+    # create a new DEBIAN package
+    def create(name, log)
+      path = File.expand_path(name)
+      FileUtils.mkdir(path)
 
-      init(name)
+      init(path, log)
     end
 
+    # initialize a new DEBIAN package
     def init(path, log)
-      FileUtils.mkdir(debpath(path))
+      dpath = debpath(path)
+      cpath = ctrlpath(path)
+   
+      FileUtils.mkdir_p(dpath)
+      log.info "Created DEBIAN folder"
 
-      control(path).save
-      log.info "Generated #{path}"
+      c = Control.default
+      c[:package] = File.basename(path)
+      Control.save(c, cpath)
+      log.info "Generated #{cpath}"
 
-      pi = "#{debpath(path)}/postinst"
+      pi = "#{dpath}/postinst"
 
       File.write(pi, "#!/bin/bash\n\n\nexit 0;")
       log.info "Generated #{pi}"
 
-      FileUtils.chmod(0755, Dir["#{debpath(path)}/*"])
-      FileUtils.chmod(0755, debpath(path))
+      FileUtils.chmod(0755, Dir["#{dpath}/*"])
+      FileUtils.chmod(0755, dpath)
 
       #cfg = {}
 
@@ -47,8 +56,13 @@ module Ian
       log.info "Generated .ianignore"
     end
 
-    def control(path)
-      Ian::Control.new(ctrlpath(path))
+    def control(path=nil)
+      if path.nil?
+        return Control.default
+      else
+        path = ctrlpath(path) if File.basename(path) != "DEBIAN"
+        return Control.load_file(path)
+      end
     end
 
     def build_package(path, log)
@@ -59,7 +73,6 @@ module Ian
       pkgr = Ian::Packager.new(path, c, log)
       pkgr.run
     end
-
 
   end
 

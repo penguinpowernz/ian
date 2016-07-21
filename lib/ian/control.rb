@@ -1,35 +1,16 @@
 require 'ian/utils'
 
-# TODO: make someone else read/write the file
 module Ian
   class ValidationError < StandardError; end
 
   class Control
-    attr_reader :path
-
-    # TODO: make load_file and parse class methods
-    # and pass a hash to initialize
-    #def self.load_file(path)
-    #  self.new(File.read(path))
-    #end
-
-    def initialize(path)
-      @path = path
-
-      if exist?
-        parse
-      else
-        @fields = defaults
-      end
-    end
-
-    def exist?
-      File.exist?(@path)
+    def initialize(**fields)
+      @fields = fields
     end
 
     # allow setting fields directly
     def []=(field, value)
-      raise ArgumentError, "Invalid field: #{field}" unless defaults.keys.include?(field)
+      valid_field!(field)
       @fields[field] = value
     end
 
@@ -38,32 +19,12 @@ module Ian
       @fields[field]
     end
 
+    # deletes a field from the hash
     def delete(field)
       field.to_sym if field.is_a? String
       valid_field!(field)
       raise ArgumentError, "Cannot remove mandatory field #{field.to_s}" if mandatory_fields.include?(field)
       @fields.delete(field)
-    end
-
-    # parse this control file into the fields hash
-    def parse
-      text = File.read(@path)
-
-      @fields = {}
-
-      fields.each do |f, name|
-        m = text.match(/^#{name}: (.*)$/)
-        next unless m
-        @fields[f] = m[1]
-      end
-
-      # for the relations fields, split the string out into an array
-      relationship_fields.each do |key|
-        next unless @fields[key]
-        @fields[key] = @fields[key].split(",").map! {|d| d.strip }
-      end
-
-      @fields[:long_desc] = text.scan(/^  (.*)$/).flatten
     end
 
     # update a bunch of fields at a time
@@ -72,7 +33,7 @@ module Ian
         valid_field!(key)
         raise ArgumentError, "Value for #{key} was empty" if value.nil? or value == ""
 
-        if relationship_fields.include?(key)
+        if self.class.relationship_fields.include?(key)
           @fields[key] = value.split(",").map {|d| d.strip }
         else
           @fields[key] = value
@@ -90,9 +51,9 @@ module Ian
       end
 
       # build the relationship fields that have been exploded into an array
-      relationship_fields.each do |key|
+      self.class.relationship_fields.each do |key|
         next unless @fields[key] and @fields[key].any?
-        lines << "%s: %s" % [ fields[key], @fields[key].join(", ") ]
+        lines << "%s: %s" % [ self.class.fields[key], @fields[key].join(", ") ]
       end
 
       lines << "Description: #{@fields[:desc]}"
@@ -108,13 +69,13 @@ module Ian
 
     # save the control file to disk
     # raises Ian::ValidationError
-    def save
-      valid!
-      File.write(@path, to_s)
+    def self.save(ctrl, path)
+      c.valid!
+      File.write(path, c.to_s)
     end
 
     # default values for a new control file
-    def defaults
+    def self.defaults
       {
         package:          "name",
         priority:         "optional",
@@ -142,7 +103,7 @@ module Ian
     end
 
     # a map of field symbols to field names
-    def fields
+    def self.fields
       {
         package:     "Package",
         depends:     "Depends",
@@ -161,11 +122,12 @@ module Ian
         maintainer:  "Maintainer",
         homepage:    "Homepage",
         arch:        "Architecture",
-        desc:        "Description"
+        desc:        "Description",
+        long_desc:   "  "
       }
     end
 
-    def relationship_fields
+    def self.relationship_fields
       [:replaces, :conflicts, :recommends, :suggests, :enhances, :predepends, :depends, :breaks]
     end
 
@@ -191,11 +153,41 @@ module Ian
     end
 
     def valid_field?(key)
-      fields.include? key
+      self.class.fields.keys.include? key
     end
 
     def valid_field!(key)
       raise ArgumentError, "Invalid field: #{key}" unless valid_field?(key)
     end
+
+    def self.load_file(path)
+      self.new(self.parse(File.read(path)))
+    end
+
+    # parse this control file into the fields hash
+    def self.parse(text)
+      fields = {}
+
+      self.fields.each do |f, name|
+        m = text.match(/^#{name}: (.*)$/)
+        next unless m
+        fields[f] = m[1]
+      end
+
+      # for the relations fields, split the string out into an array
+      self.relationship_fields.each do |key|
+        next unless fields[key]
+        fields[key] = fields[key].split(",").map! {|d| d.strip }
+      end
+
+      fields[:long_desc] = text.scan(/^  (.*)$/).flatten
+      
+      return fields
+    end
+
+    def self.default
+      self.new(self.defaults)
+    end
+
   end
 end
