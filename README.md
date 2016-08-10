@@ -9,6 +9,12 @@ bundler.
 It is intended to be helpful when integrating other build tools/systems and
 with CI/CD.
 
+## Requirements
+
+* dpkg
+* fakeroot
+* rsync
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -122,6 +128,7 @@ Need help with the control files?  Try these links:
 - [ ] add commands to help with releasing new versions/tagging
 - [ ] allow packaging past versions from git tags
 - [ ] add option for semver enforcement
+- [ ] remove rsync dependency
 
 ## Development
 
