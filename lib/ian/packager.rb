@@ -52,7 +52,9 @@ module Ian
 
       # move all the files from the root of the package
       files.each do |file|
+        file = File.join(@dir, file)
         next unless File.exist?(file)
+
         FileUtils.mv(file, docs)
         @log.info "#{file} => usr/share/docs/#{pkgname}"
       end
