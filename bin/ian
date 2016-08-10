@@ -84,11 +84,21 @@ Slop.parse help: true do
   command :info do
     description "Print information for this package"
 
+    on :v, :version, "Show just the version of this package"
+    on :a, :arch,    "Show just the architecture of this package"
+
     run do |opts, args|
       check_initialized!
 
       c = Ian.control(IAN_DIR)
-      puts c
+      case
+      when opts.version?
+        puts c[:version]
+      when opts.arch?
+        puts c[:arch]
+      else
+        puts c
+      end
 
       unless c.valid?
         puts "\n"
