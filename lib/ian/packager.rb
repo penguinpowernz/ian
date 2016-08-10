@@ -4,9 +4,10 @@ require 'fileutils'
 module Ian
   class Packager
     def initialize(path, ctrl, log)
-      @path = path
+      @path = path  # this is the source path that the files to package are copied from
       @ctrl = ctrl
-      @log = log
+      @log  = log
+      @dir  = nil   # this is the tmp directory that the package is built from
     end
 
     # run the packager
