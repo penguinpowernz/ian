@@ -45,6 +45,7 @@ module Ian
     def move_root_files
       docs  = "#{@dir}/usr/share/docs/#{pkgname}"
       files = Dir.entries(@dir).select {|f| !File.directory?(f) }
+      return unless files.any?
 
       FileUtils.mkdir_p(docs)
 
