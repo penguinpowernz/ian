@@ -72,10 +72,11 @@ Slop.parse help: true do
 
     run do |opts, args|
       check_initialized!
-      
+
       c = Ian.control(IAN_DIR)
-      c.update(opts.to_hash)
-      c.save
+      opts = opts.to_hash.reject! {|k,v| v.nil? }
+      c.update(opts)
+      Ian::Control.save(c, Ian.ctrlpath(IAN_DIR))
       puts "Updated control file"
     end
   end
