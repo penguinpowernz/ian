@@ -67,7 +67,7 @@ module Ian
       FileUtils.chmod(0755, Ian.debpath(@dir))
 
       pkg    = File.join(pkgdir, "#{pkgname}.deb")
-      output = %x[dpkg-deb -b #{@dir} #{pkg}]
+      output = %x[fakeroot dpkg-deb -b #{@dir} #{pkg}]
 
       return [$?.success?, pkg, output]
     end
