@@ -44,8 +44,7 @@ module Ian
     # move extraneous stuff like README and CHANGELOG to /usr/share/doc
     def move_root_files
       docs  = "#{@dir}/usr/share/docs/#{pkgname}"
-      files = %x[find #{@dir} -type f -maxdepth 1].lines.map {|l| l.chomp}
-      raise RuntimeError, "Unable to copy root files" unless $?.success?
+      files = Dir.entries(@dir).select {|f| !File.directory?(f) }
 
       FileUtils.mkdir_p(docs)
 
