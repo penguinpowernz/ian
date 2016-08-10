@@ -97,18 +97,17 @@ module Ian
     end
 
     def excludes
-      files = %w[.git .gitignore .ianignore]
+      files      = %w[.git .gitignore .ianignore]
+      ignorefile = File.join(@path, ".ianignore")
 
-      return files unless File.exist?(".ianignore")
-      File.read(File.join(@path, ".ianignore")).lines.each do |ign|
+      return files unless File.exist?(ignorefile)
+
+      File.read(ignorefile).lines.each do |ign|
         next if ign.start_with? "#"
-
-        ign.chomp!
-        igns = Dir["#{@path}/#{ign}"]
-        next if igns.empty?
-
-        files+= igns
+        files << ign.chomp
       end
+
+      files.each {|f| @log.debug "Ignoring file: %s" % f }
 
       files
     end
