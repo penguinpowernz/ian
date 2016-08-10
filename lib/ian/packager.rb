@@ -61,7 +61,7 @@ module Ian
     def build
       pkgdir = File.join(@path, "pkg")
       FileUtils.mkdir_p pkgdir
-    
+
       FileUtils.chmod(0755, Dir["#{Ian.debpath(@dir)}/*"])
       FileUtils.chmod(0755, Ian.debpath(@dir))
 
@@ -97,14 +97,15 @@ module Ian
 
     def excludes
       files = %w[.git .gitignore .ianignore]
-      
+
+      return files unless File.exist?(".ianignore")
       File.read(File.join(@path, ".ianignore")).lines.each do |ign|
         next if ign.start_with? "#"
-        
+
         ign.chomp!
         igns = Dir["#{@path}/#{ign}"]
         next if igns.empty?
-        
+
         files+= igns
       end
     end

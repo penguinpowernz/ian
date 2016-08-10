@@ -116,7 +116,8 @@ Need help with the control files?  Try these links:
 
 - [ ] MD5sums generation
 - [x] finish package generation code
-- [ ] ADD SPECS!!!!
+- [x] ADD SPECS!!!!
+- [ ] ADD MORE SPECS!!!!
 - [ ] Nicer output
 - [ ] add commands to help with releasing new versions/tagging
 - [ ] allow packaging past versions from git tags
