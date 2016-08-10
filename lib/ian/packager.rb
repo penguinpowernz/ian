@@ -108,6 +108,8 @@ module Ian
 
         files+= igns
       end
+
+      files
     end
 
   end

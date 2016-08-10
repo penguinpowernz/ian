@@ -70,8 +70,8 @@ module Ian
     # save the control file to disk
     # raises Ian::ValidationError
     def self.save(ctrl, path)
-      c.valid!
-      File.write(path, c.to_s)
+      ctrl.valid!
+      File.write(File.join(path, 'control'), ctrl.to_s)
     end
 
     # default values for a new control file
@@ -127,6 +127,8 @@ module Ian
       }
     end
 
+    def fields; self.class.fields; end
+
     def self.relationship_fields
       [:replaces, :conflicts, :recommends, :suggests, :enhances, :predepends, :depends, :breaks]
     end
@@ -181,7 +183,7 @@ module Ian
       end
 
       fields[:long_desc] = text.scan(/^  (.*)$/).flatten
-      
+
       return fields
     end
 

@@ -30,7 +30,7 @@ module Ian
     def init(path, log)
       dpath = debpath(path)
       cpath = ctrlpath(path)
-   
+
       FileUtils.mkdir_p(dpath)
       log.info "Created DEBIAN folder"
 
@@ -68,7 +68,7 @@ module Ian
     def build_package(path, log)
       c = control(path)
       c[:size] = Utils.determine_installed_size(path)
-      c.save
+      Ian::Control.save(c, path)
 
       pkgr = Ian::Packager.new(path, c, log)
       pkgr.run
