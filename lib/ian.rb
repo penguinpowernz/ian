@@ -68,7 +68,7 @@ module Ian
     def build_package(path, log)
       c = control(path)
       c[:size] = Utils.determine_installed_size(path)
-      Ian::Control.save(c, path)
+      Ian::Control.save(c, ctrlpath(path))
 
       pkgr = Ian::Packager.new(path, c, log)
       pkgr.run

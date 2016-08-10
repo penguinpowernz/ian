@@ -71,7 +71,7 @@ module Ian
     # raises Ian::ValidationError
     def self.save(ctrl, path)
       ctrl.valid!
-      File.write(File.join(path, 'control'), ctrl.to_s)
+      File.write(path, ctrl.to_s)
     end
 
     # default values for a new control file
