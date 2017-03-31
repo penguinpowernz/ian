@@ -110,7 +110,7 @@ Slop.parse help: true do
   command :deps do
     description "Print dependencies for this package"
 
-    run do |opts, args| 
+    run do |opts, args|
       check_initialized!
 
       ctrl = Ian.control(IAN_DIR)
@@ -140,18 +140,19 @@ Slop.parse help: true do
       check_initialized!
 
       ctrl = Ian.control(IAN_DIR)
+      ctrlpath = Ian.ctrlpath(IAN_DIR)
       version = ctrl[:version]
 
       if args.any?
         version = args.first
-        version.gsub!(/^v/, '')
+        version = version.gsub(/^v/, '')
         log.info "Releasing v#{version}"
         log.info "Updating control file"
         ctrl[:version] = version
-        ctrl.save
+        Ian::Control.save(ctrl, ctrlpath)
 
         log.info "Committing control file"
-        system "git add #{ctrl.path}"
+        system "git add #{ctrlpath}"
         system "git commit -m 'releasing v#{version}'"
 
       end
