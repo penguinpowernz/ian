@@ -77,13 +77,7 @@ module Ian
     private
 
     def pkgname
-      parts = [
-        @ctrl[:package],
-        @ctrl[:version],
-        @ctrl[:arch]
-      ]
-
-      "%s_%s_%s" % parts
+      @ctrl.pkgname
     end
 
     # generate the rsync command

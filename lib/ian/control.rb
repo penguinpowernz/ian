@@ -19,6 +19,16 @@ module Ian
       @fields[field]
     end
 
+    def pkgname
+      parts = [
+        @fields[:package],
+        @fields[:version],
+        @fields[:arch]
+      ]
+
+      "%s_%s_%s" % parts
+    end
+
     # deletes a field from the hash
     def delete(field)
       field.to_sym if field.is_a? String
