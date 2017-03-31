@@ -3,7 +3,7 @@ module Ian
     extend self
 
     def determine_installed_size(path)
-      %x[du #{path} -ks --exclude=".git"].split.first
+      %x[du #{path} -ks --exclude=".git" --exclude="pkg"].split.first
     end
 
     # try to guess the maintainer by reading the git config file
