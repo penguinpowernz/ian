@@ -105,6 +105,17 @@ version (prepending it with a `v`) and then builds the package as above.
 This does the same as before, however first it will take the version number in
 the argument, write it to the control file and commit the control file.
 
+**Push a package**
+
+Push a package to remote repo by adding a file called `.ianpush` in the repo root
+containing a command to run to push the file up.  E.G:
+
+    package_cloud push my/repo/debian/jessie
+
+Then when you run `ian push` it will run that command and tack the package for
+the current version on the end, warning you if you didn't run `ian pkg` yet.  You
+can also give the package name as an argument like `ian push pkg/the-pkg_0.0.1_all.deb`.
+
 **Show versions**:
 
 Show the versions by using this command:
@@ -129,6 +140,7 @@ Need help with the control files?  Try these links:
 - [ ] allow packaging past versions from git tags
 - [ ] add option for semver enforcement
 - [ ] remove rsync dependency
+- [ ] add PUSH command to a server via rsync (lol)
 
 ## Development
 
