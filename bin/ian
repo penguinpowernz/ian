@@ -74,19 +74,21 @@ Slop.parse help: true do
         exit 1
       end
 
-      cmd = File.read(File.join(IAN_DIR, ".ianpush")).chomp
+      cmds = File.read(File.join(IAN_DIR, ".ianpush")).lines.map {|l| l.chomp }
       c   = Ian.control(IAN_DIR)
 
       if args.first
-        cmd += " "+args.first
+        cmds.map! {|cmd| cmd += " "+args.first }
       else
         fn = c.pkgname+".deb"
         path = File.join(IAN_DIR, "pkg", fn)
         abort "Package not yet built: #{fn}" unless File.exist?(path)
-        cmd += " "+ path
+        cmds.map! {|cmd| cmd += " "+ path }
       end
 
-      system cmd
+      cmds.each do |cmd|
+        system cmd
+      end
     end
   end
 
