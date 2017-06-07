@@ -77,6 +77,19 @@ This prints the dependencies from the control file each on a separate line:
 Using this you can programatically set the version or architecture in the control
 file.
 
+**Run a build script**
+
+Put an executable script at `DEBIAN/build` and when you run:
+
+    $ ian build
+
+Ian will run the script passing with the following args:
+
+    $ DEBAIN/build <dir> <version> <arch>
+
+That is, the path to the package directory and the version and arch from the
+control file.
+
 **Build a package**:
 
     $ ian pkg

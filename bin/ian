@@ -53,6 +53,27 @@ Slop.parse help: true do
     end
   end
 
+  command :build do
+    description "Run the script at DEBIAN/build"
+
+    run do |opts, args|
+      c   = Ian.control(IAN_DIR)
+      build_script = File.join(Ian.debpath(IAN_DIR), "build")
+      abort "no such script: #{build_script}" unless File.exist?(build_script)
+      abort "not executable: #{build_script}" unless File.executable?(build_script)
+
+      cmd = "#{build_script} \"#{IAN_DIR}\" \"#{c[:version]}\" \"#{c[:arch]}\" "
+      log.debug "Running build script: #{cmd}"
+
+      system cmd
+
+      if !$?.success?
+        log.fatal "Script exited with status #{$?.exitstatus}"
+        exit $?.exitstatus
+      end
+    end
+  end
+
   command :pkg do
     description "Build a Debian package"
 
