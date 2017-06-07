@@ -77,8 +77,13 @@ Slop.parse help: true do
   command :pkg do
     description "Build a Debian package"
 
+    on :b, :build, "Run the build script prior to packaging"
+
     run do |opts, args|
       check_initialized!
+
+      system "#{$0} build" if opts.build?
+      exit $?.exitstatus unless $?.success?
 
       pkg = Ian.build_package(IAN_DIR, log)
       log.info "Package built to #{pkg}"

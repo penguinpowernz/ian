@@ -93,6 +93,7 @@ control file.
 **Build a package**:
 
     $ ian pkg
+    $ ian pkg -b   # runs the build script first
 
 Before building a package ian will determine the installed size and save it to
 the control file.  Then the contents are rsynced to a temp dir, excluding the `.git`
