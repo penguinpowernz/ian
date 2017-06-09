@@ -82,8 +82,10 @@ Slop.parse help: true do
     run do |opts, args|
       check_initialized!
 
-      system "#{$0} build" if opts.build?
-      exit $?.exitstatus unless $?.success?
+      if opts.build?
+        system "#{$0} build"
+        exit $?.exitstatus unless $?.success?
+      end
 
       pkg = Ian.build_package(IAN_DIR, log)
       log.info "Package built to #{pkg}"
