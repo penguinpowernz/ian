@@ -105,9 +105,17 @@ a folder of the same name as the generated package.
 
 Finally the package is built into a `pkg` folder in the format `name_version_arch`.
 
+**Install a package**
+
+    $ ian install [-b]
+
+Running the following will build and install a package with one command.  This is great
+for installing the package during development and mimics the `rake install` command of gem
+development.
+
 **Releasing a package**:
 
-Tagging commits with the package version can be done using this command:
+__EXPERIMENTAL__ Tagging commits with the package version can be done using this command:
 
     $ ian release
 

@@ -92,6 +92,25 @@ Slop.parse help: true do
     end
   end
 
+  command :install do
+    description "Build and install a Debian package"
+    on :b, :build, "Run the build script prior to packaging"
+
+    run do |opts, args|
+      check_initialized!
+
+      if opts.build?
+        system "#{$0} build"
+        exit $?.exitstatus unless $?.success?
+      end
+
+      pkg = Ian.build_package(IAN_DIR, log)
+      log.info "Package built to #{pkg}"
+
+      system "sudo dpkg -i #{pkg}"
+    end
+  end
+
   command :push do
     description "Push the latest debian package up"
 
