@@ -78,9 +78,14 @@ Slop.parse help: true do
     description "Build a Debian package"
 
     on :b, :build, "Run the build script prior to packaging"
+    on :p, :path,  "Output only the path to the package"
 
     run do |opts, args|
       check_initialized!
+
+      if opts.path?
+        log.level = Logger::FATAL
+      end
 
       if opts.build?
         system "#{$0} build"
@@ -89,6 +94,10 @@ Slop.parse help: true do
 
       pkg = Ian.build_package(IAN_DIR, log)
       log.info "Package built to #{pkg}"
+
+      if opts.path?
+        puts pkg
+      end
     end
   end
 
