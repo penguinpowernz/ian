@@ -23,6 +23,7 @@ module Ian
       end
 
       move_root_files
+      generate_md5sums
       success, pkg, output = *build
 
       raise RuntimeError, "Failed to build package: #{output}" unless success
@@ -62,6 +63,7 @@ module Ian
 
     # build the package out of the temp dir
     def build
+      @log.info "Packaging files"
       pkgdir = File.join(@path, "pkg")
       FileUtils.mkdir_p pkgdir
 
@@ -90,6 +92,14 @@ module Ian
       end
 
       cmd
+    end
+
+    def generate_md5sums
+      @log.debug "Generating md5sums"
+      sums = `find #{@dir} -type f|sort|xargs md5sum|grep -v DEBIAN`
+      sums.gsub!(/#{@dir}\//, "")
+      File.write(File.join(@dir, "DEBIAN", "md5sums"), sums)
+      File.write(File.join(@path, "DEBIAN", "md5sums"), sums)
     end
 
     def excludes
