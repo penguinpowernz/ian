@@ -44,7 +44,7 @@ module Ian
 
     # move extraneous stuff like README and CHANGELOG to /usr/share/doc
     def move_root_files
-      docs  = "#{@dir}/usr/share/docs/#{pkgname}"
+      docs  = "#{@dir}/usr/share/docs/#{@ctrl[:package]}"
       files = Dir.entries(@dir).select {|f| !File.directory?(f) }
       return unless files.any?
 
