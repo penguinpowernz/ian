@@ -45,7 +45,7 @@ module Ian
 
     # move extraneous stuff like README and CHANGELOG to /usr/share/doc
     def move_root_files
-      docs  = "#{@dir}/usr/share/docs/#{@ctrl[:package]}"
+      docs  = "#{@dir}/usr/share/doc/#{@ctrl[:package]}"
       files = Dir.entries(@dir).select {|f| !File.directory?(f) }
       return unless files.any?
 
@@ -57,7 +57,7 @@ module Ian
         next unless File.exist?(file)
 
         FileUtils.mv(file, docs)
-        @log.info "#{file} => usr/share/docs/#{pkgname}"
+        @log.info "#{file} => usr/share/doc/#{pkgname}"
       end
     end
 
