@@ -15,7 +15,7 @@ def check_initialized!
   abort "ERROR: Not initialized" unless initialized?
 end
 
-log = Logger.new(STDOUT)
+log = Logger.new(STDERR)
 
 Slop.parse help: true do
 
