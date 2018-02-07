@@ -1,6 +1,6 @@
 # Ian
 
-**This has now been ported to [golang](https://www.youtube.com/watch?v=NooW_RbfdWI)** so if you don't want to deal with ruby gem dependencies you can use that version.  **This version version should be considered DEPRECATED.**
+**This has now been ported to [golang](https://github.com/penguinpowernz/go-ian)**.  **This version version should be considered DEPRECATED.**
 
 A Debian CLI package hacking tool named in memory of the late Ian Murdock.
 
